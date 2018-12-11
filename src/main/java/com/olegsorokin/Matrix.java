@@ -7,29 +7,30 @@ public class Matrix {
     private int columns;
     private float[] data;
 
-    public Matrix(int rows, int columns) {
+    public Matrix(int rows, int columns) throws Exception {
+        if (rows == 0 || columns == 0) {
+            throw new Exception("Passed zero value as number of rows/columns to Matrix constructor.");
+        }
         this.rows = rows;
         this.columns = columns;
-
         data = new float[rows * columns];
-
-        for (int i = 0; i < rows * columns; i++) {
-            data[i] = 0;
-        }
     }
 
-    public Matrix(float[] data, int rows, int columns) throws ArrayIndexOutOfBoundsException {
+    public Matrix(final float[] data, int rows, int columns) throws Exception {
+        if (rows == 0 || columns == 0) {
+            throw new Exception("Passed zero value as number of rows/columns to Matrix constructor.");
+        }
         if (data.length != rows * columns) {
-            throw new ArrayIndexOutOfBoundsException("Array provided to Matrix constructor must have (columns * rows) elements!");
+            throw new Exception("Array provided to Matrix constructor must have (rows * columns) elements.");
         }
         this.rows = rows;
         this.columns = columns;
         this.data = data;
     }
 
-    public static Matrix multiply(Matrix a, Matrix b) throws ArrayIndexOutOfBoundsException {
+    public static Matrix multiply(final Matrix a, final Matrix b) throws Exception {
         if (a.rows != b.columns) {
-            throw new ArrayIndexOutOfBoundsException("Unable to multiply matrices, wrong matrices dimensions!");
+            throw new Exception("Unable to multiply matrices, wrong matrices dimensions.");
         }
         Matrix result = new Matrix(a.rows, b.columns);
         for (int i = 0; i < a.rows; i++) {
@@ -38,6 +39,14 @@ public class Matrix {
                     result.data[j + i * b.columns] += a.data[k + i * a.columns] * b.data[j + k * b.columns];
                 }
             }
+        }
+        return result;
+    }
+
+    public static Matrix modMultiply(float modulus, final Matrix a, final Matrix b) throws Exception {
+        Matrix result = multiply(a, b);
+        for (int i = 0; i < result.rows * result.columns; i++) {
+            result.data[i] %= modulus;
         }
         return result;
     }
