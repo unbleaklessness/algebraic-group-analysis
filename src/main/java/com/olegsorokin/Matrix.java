@@ -1,8 +1,9 @@
 package main.java.com.olegsorokin;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
-public class Matrix {
+public class Matrix implements Comparator<Matrix>, Comparable<Matrix> {
     private int rows;
     private int columns;
     private float[] data;
@@ -55,14 +56,25 @@ public class Matrix {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 System.out.print(data[j + i * columns]);
-                System.out.print("   ");
+                System.out.print("  ");
             }
             System.out.println();
         }
+        System.out.println();
     }
 
     @Override
-    public boolean equals(Object other) {
+    public int compare(final Matrix m1, final Matrix m2) {
+        return Arrays.compare(m1.data, m2.data);
+    }
+
+    @Override
+    public int compareTo(final Matrix other) {
+        return compare(this, other);
+    }
+
+    @Override
+    public boolean equals(final Object other) {
         if (this == other) return true;
 
         if (!(other instanceof Matrix)) return false;

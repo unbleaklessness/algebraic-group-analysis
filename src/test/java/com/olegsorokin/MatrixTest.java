@@ -5,31 +5,60 @@ import org.junit.Assert;
 
 import main.java.com.olegsorokin.Matrix;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class MatrixTest {
     @Test
     public void Multiply_3x2_By_2x3() throws Exception {
         Matrix m1 = new Matrix(new float[] {1, 2, 3, 4, 5, 6}, 3, 2);
         Matrix m2 = new Matrix(new float[] {6, 5, 4, 3, 2, 1}, 2, 3);
-        Matrix result = Matrix.multiply(m1, m2);
+        Matrix actual = Matrix.multiply(m1, m2);
         Matrix expected = new Matrix(new float[] {12, 9, 6, 30, 23, 16, 48, 37, 26}, 3,3);
-        Assert.assertEquals(result, expected);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void Multiply_3x3_By_3x3() throws Exception {
         Matrix m1 = new Matrix(new float[] {1, 2, 3, 4, 5, 6, 7, 8, 9}, 3, 3);
         Matrix m2 = new Matrix(new float[] {9, 8, 7, 6, 5, 4, 3, 2, 1}, 3, 3);
-        Matrix result = Matrix.multiply(m1, m2);
+        Matrix actual = Matrix.multiply(m1, m2);
         Matrix expected = new Matrix(new float[] {30, 24, 18, 84, 69, 54, 138, 114, 90}, 3,3);
-        Assert.assertEquals(result, expected);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void Mod_Multiply_2x2_By_2x2() throws Exception {
         Matrix m1 = new Matrix(new float[] {7, 4, 5, 6}, 2, 2);
         Matrix m2 = new Matrix(new float[] {8, 7, 11, 4}, 2, 2);
-        Matrix result = Matrix.modMultiply(13, m1, m2);
+        Matrix actual = Matrix.modMultiply(13, m1, m2);
         Matrix expected = new Matrix(new float[] {9, 0, 2, 7}, 2, 2);
-        Assert.assertEquals(result, expected);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void Test_Matrices_With_HashSets() throws Exception {
+        Matrix m1 = new Matrix(new float[] {3, 9, 5, 1}, 2, 2);
+        Matrix m2 = new Matrix(new float[] {3, 10, 5, 2}, 2, 2);
+        Matrix m3 = new Matrix(new float[] {3, 9, 6, 1}, 2, 2);
+        Set<Matrix> set1 = new HashSet<>();
+        Set<Matrix> set2 = new HashSet<>();
+
+        set1.add(m1);
+        Assert.assertEquals(1, set1.size());
+        set1.add(m1);
+        Assert.assertEquals(1, set1.size());
+        set1.add(m2);
+        Assert.assertEquals(2, set1.size());
+        set1.add(m2);
+        Assert.assertEquals(2, set1.size());
+        set1.add(m3);
+        Assert.assertEquals(3, set1.size());
+
+        set2.add(m1);
+        set2.add(m2);
+        Assert.assertNotEquals(set1, set2);
+        set2.add(m3);
+        Assert.assertEquals(set1, set2);
     }
 }

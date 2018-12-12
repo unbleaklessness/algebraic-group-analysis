@@ -1,25 +1,28 @@
 package main.java.com.olegsorokin;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Generator {
-    public static Matrix[] generate(float modulus, final Matrix[] initials) throws Exception {
-        Set<Matrix> current = new HashSet<>(Arrays.asList(initials));
+    public static ArrayList<Matrix> generate(float modulus, final ArrayList<Matrix> initials) throws Exception {
+        ArrayList<Matrix> current = initials;
 
         while (true) {
-            Set<Matrix> next = new HashSet<>();
+            ArrayList<Matrix> next = new ArrayList<>();
 
             for (Matrix m1 : current) {
                 for (Matrix m2 : current) {
-                    next.add(Matrix.modMultiply(modulus, m1, m2));
+                    Matrix m = Matrix.modMultiply(modulus, m1, m2);
+                    if (!next.contains(m)) {
+                        next.add(m);
+                    }
                 }
             }
 
+            Collections.sort(current);
+            Collections.sort(next);
             if (current.equals(next)) {
-                Matrix[] result = new Matrix[current.size()];
-                return current.toArray(result);
+                return current;
             }
 
             current = next;

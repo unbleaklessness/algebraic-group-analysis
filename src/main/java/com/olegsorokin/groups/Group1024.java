@@ -4,19 +4,20 @@ import main.java.com.olegsorokin.Matrix;
 
 import java.util.ArrayList;
 
-public class Group168 implements IGroup {
+public class Group1024 implements IGroup {
     @Override
     public float getModulus() {
-        return 7;
+        return 13;
     }
 
     @Override
     public ArrayList<Matrix> getInitials() throws Exception {
         ArrayList<Matrix> result = new ArrayList<>();
-        result.add(new Matrix(new float[] {0, 3, 2, 4}, 2, 2));
-        result.add(new Matrix(new float[] {0, 1, 6, 0}, 2, 2));
+        result.add(new Matrix(new float[] {2, 0, 0, 7}, 2, 2));
+        result.add(new Matrix(new float[] {0, 5, 5, 3}, 2, 2));
         result.add(new Matrix(new float[] {1, 1, 0, 1}, 2, 2));
-        result.add(new Matrix(new float[] {3, 0, 0, 5}, 2, 2));
+        result.add(new Matrix(new float[] {0, 1, 12, 0}, 2, 2));
+        result.add(new Matrix(new float[] {2, 2, 3, 10}, 2, 2));
         return result;
     }
 }
