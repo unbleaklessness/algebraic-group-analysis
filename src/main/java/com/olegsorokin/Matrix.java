@@ -2,52 +2,42 @@ package main.java.com.olegsorokin;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.function.Function;
 
-public class Matrix implements Comparator<Matrix>, Comparable<Matrix> {
+public class Matrix implements Comparator<Matrix>, Comparable<Matrix>, IMultiplicable<Matrix> {
     private int rows;
     private int columns;
     private float[] data;
 
-    public Matrix(int rows, int columns) throws Exception {
-        if (rows == 0 || columns == 0) {
-            throw new Exception("Passed zero value as number of rows/columns to Matrix constructor.");
-        }
+    public Matrix(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
         data = new float[rows * columns];
     }
 
-    public Matrix(final float[] data, int rows, int columns) throws Exception {
-        if (rows == 0 || columns == 0) {
-            throw new Exception("Passed zero value as number of rows/columns to Matrix constructor.");
-        }
+    public Matrix(final float[] data, int rows, int columns) {
         if (data.length != rows * columns) {
-            throw new Exception("Array provided to Matrix constructor must have (rows * columns) elements.");
+            this.rows = 0;
+            this.columns = 0;
+            this.data = new float[0];
+        } else {
+            this.rows = rows;
+            this.columns = columns;
+            this.data = data;
         }
-        this.rows = rows;
-        this.columns = columns;
-        this.data = data;
     }
 
-    public static Matrix multiply(final Matrix a, final Matrix b) throws Exception {
-        if (a.rows != b.columns) {
-            throw new Exception("Unable to multiply matrices, wrong matrices dimensions.");
+    public Matrix multiply(final Matrix other) {
+        if (rows != other.columns) {
+            return new Matrix(0, 0);
         }
-        Matrix result = new Matrix(a.rows, b.columns);
-        for (int i = 0; i < a.rows; i++) {
-            for (int j = 0; j < b.columns; j++) {
-                for (int k = 0; k < a.columns; k++) {
-                    result.data[j + i * b.columns] += a.data[k + i * a.columns] * b.data[j + k * b.columns];
+        Matrix result = new Matrix(rows, other.columns);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < other.columns; j++) {
+                for (int k = 0; k < columns; k++) {
+                    result.data[j + i * other.columns] += data[k + i * columns] * other.data[j + k * other.columns];
                 }
             }
-        }
-        return result;
-    }
-
-    public static Matrix modMultiply(float modulus, final Matrix a, final Matrix b) throws Exception {
-        Matrix result = multiply(a, b);
-        for (int i = 0; i < result.rows * result.columns; i++) {
-            result.data[i] %= modulus;
         }
         return result;
     }
@@ -60,7 +50,14 @@ public class Matrix implements Comparator<Matrix>, Comparable<Matrix> {
             }
             System.out.println();
         }
-        System.out.println();
+    }
+
+    public Matrix map(Function<Float, Float> function) {
+        Matrix result = new Matrix(rows, columns);
+        for (int i = 0; i < rows * columns; i++) {
+            result.data[i] = function.apply(data[i]);
+        }
+        return result;
     }
 
     @Override

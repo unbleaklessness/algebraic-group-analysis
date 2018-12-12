@@ -3,16 +3,16 @@ package main.java.com.olegsorokin;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class GroupGenerator {
-    public static ArrayList<Matrix> generate(float modulus, final ArrayList<Matrix> initials) throws Exception {
-        HashSet<Matrix> current = new HashSet<>(initials);
+public class GroupGenerator<T> {
+    public ArrayList<T> generate(final ArrayList<T> initials, final IMultiplicator<T> multiplicator) {
+        HashSet<T> current = new HashSet<>(initials);
 
         while (true) {
-            HashSet<Matrix> next = new HashSet<>();
+            HashSet<T> next = new HashSet<>();
 
-            for (final Matrix m1 : current) {
-                for (final Matrix m2 : current) {
-                    next.add(Matrix.modMultiply(modulus, m1, m2));
+            for (final T m1 : current) {
+                for (final T m2 : current) {
+                    next.add(multiplicator.multiply(m1, m2));
                 }
             }
 

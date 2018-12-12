@@ -2,28 +2,34 @@ package main.java.com.olegsorokin;
 
 import java.util.ArrayList;
 
-public class MultiplicationTable {
-    private int[][] table;
-    private ArrayList<Matrix> elements;
+public class MultiplicationTable<T> implements IMultiplicator<Integer> {
+    private Integer[][] table;
+    private ArrayList<T> elements;
 
-    public MultiplicationTable(float modulus, final ArrayList<Matrix> matrices) throws Exception {
-        int size = matrices.size();
-        table = new int[size][size];
-        elements = matrices;
+    public MultiplicationTable(final ArrayList<T> elements, final IMultiplicator<T> multiplicator) {
+        int size = elements.size();
+
+        table = new Integer[size][size];
+        this.elements = elements;
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                Matrix m = Matrix.modMultiply(modulus, matrices.get(i), matrices.get(j));
-                table[i][j] = matrices.indexOf(m);
+                table[i][j] = elements.indexOf(multiplicator.multiply(elements.get(i), elements.get(j)));
             }
         }
     }
 
-    public int multiply(int row, int column) {
+    @Override
+    public Integer multiply(Integer row, Integer column) {
         return table[row][column];
     }
 
-    public Matrix getMatrix(int n) {
+    public T getElement(int n) {
         return elements.get(n);
+    }
+
+    public int size() {
+        return table.length;
     }
 
     public void print() {
@@ -34,6 +40,5 @@ public class MultiplicationTable {
             }
             System.out.println();
         }
-        System.out.println();
     }
 }
