@@ -56,7 +56,7 @@ public class Matrix implements Comparator<Matrix>, Comparable<Matrix> {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 System.out.print(data[j + i * columns]);
-                System.out.print("  ");
+                System.out.print(" ");
             }
             System.out.println();
         }
@@ -70,7 +70,7 @@ public class Matrix implements Comparator<Matrix>, Comparable<Matrix> {
 
     @Override
     public int compareTo(final Matrix other) {
-        return compare(this, other);
+        return Arrays.compare(data, other.data);
     }
 
     @Override
@@ -82,5 +82,10 @@ public class Matrix implements Comparator<Matrix>, Comparable<Matrix> {
         Matrix matrix = (Matrix) other;
 
         return Arrays.equals(data, matrix.data) && rows == matrix.rows && columns == matrix.columns;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(data);
     }
 }
