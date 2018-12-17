@@ -24,9 +24,4 @@ public class Pair<A, B> {
         System.out.print(second);
         System.out.print(")");
     }
-
-    public void println() {
-        print();
-        System.out.println();
-    }
 }

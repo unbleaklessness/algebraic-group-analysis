@@ -1,5 +1,8 @@
 package main.java.com.olegsorokin;
 
+import main.java.com.olegsorokin.interfaces.IMultiplicable;
+import main.java.com.olegsorokin.interfaces.IMultiplicator;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 

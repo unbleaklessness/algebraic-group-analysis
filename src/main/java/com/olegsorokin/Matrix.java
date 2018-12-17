@@ -1,5 +1,7 @@
 package main.java.com.olegsorokin;
 
+import main.java.com.olegsorokin.interfaces.IMultiplicable;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Function;
@@ -38,6 +40,42 @@ public class Matrix implements Comparator<Matrix>, Comparable<Matrix>, IMultipli
                     result.data[j + i * other.columns] += data[k + i * columns] * other.data[j + k * other.columns];
                 }
             }
+        }
+        return result;
+    }
+
+    public Matrix power(final int n) {
+        if (rows != columns) {
+            return new Matrix(0, 0);
+        }
+        if (n < 0) {
+            // TODO: Add support for negative powers.
+            System.out.println("Raising a matrix in a negative power is not yet supported!");
+            return new Matrix(0, 0);
+        } else if (n == 0) {
+            return identity(rows);
+        }
+        Matrix result = copy();
+        for (int i = 1; i < n; i++) {
+            result = result.multiply(this);
+        }
+        return result;
+    }
+
+    public static Matrix identity(int size) {
+        Matrix result = new Matrix(size, size);
+        int index = 0;
+        for (int i = 0; i < size; i++) {
+            result.data[index] = 1;
+            index += size + 1;
+        }
+        return result;
+    }
+
+    public Matrix copy() {
+        Matrix result = new Matrix(rows, columns);
+        for (int i = 0; i < rows * columns; i++) {
+            result.data[i] = data[i];
         }
         return result;
     }

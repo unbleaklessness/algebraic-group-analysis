@@ -1,9 +1,11 @@
 package main.java.com.olegsorokin;
 
-public class MatrixModMultiplicator implements IMultiplicator<Matrix> {
+import main.java.com.olegsorokin.interfaces.IMultiplicator;
+
+public class MatrixModulusMultiplicator implements IMultiplicator<Matrix> {
     private final float modulus;
 
-    public MatrixModMultiplicator(float modulus) {
+    public MatrixModulusMultiplicator(float modulus) {
         this.modulus = modulus;
     }
     

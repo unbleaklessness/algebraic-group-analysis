@@ -1,16 +1,19 @@
 package main.java.com.olegsorokin;
 
+import main.java.com.olegsorokin.interfaces.IMultiplicator;
+import main.java.com.olegsorokin.utils.Pair;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class MultiplicationTable<T> implements IMultiplicator<Integer> {
-    private Integer[][] table;
-    private ArrayList<T> elements;
+    private int[][] table;
+    private int size;
 
     public MultiplicationTable(final ArrayList<T> elements, final IMultiplicator<T> multiplicator) {
-        int size = elements.size();
-
-        table = new Integer[size][size];
-        this.elements = elements;
+        size = elements.size();
+        table = new int[size][size];
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -24,12 +27,16 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
         return table[row][column];
     }
 
-    public T getElement(int n) {
-        return elements.get(n);
+    public Integer power(Integer element, Integer n) {
+        Integer result = element;
+        for (int i = 1; i < n; i++) {
+            result = table[result][element];
+        }
+        return result;
     }
 
     public int size() {
-        return table.length;
+        return size;
     }
 
     public void print() {
@@ -40,5 +47,62 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
             }
             System.out.println();
         }
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getCommutative() {
+        ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (table[i][j] == table[j][i]) {
+                    result.add(new Pair<>(i, j));
+                }
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Integer> getNeutrals() {
+        ArrayList<Integer> result = new ArrayList<>();
+        int[] row = IntStream.range(0, size).toArray();
+        for (int i = 0; i < size; i++) {
+            if (Arrays.equals(table[i], row)) {
+                System.out.println("True");
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getInverses(int neutral) {
+        ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (table[i][j] == neutral) {
+                    result.add(new Pair<>(i, j));
+                }
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getEquivalents(int identity) {
+        ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            // TODO.
+        }
+        return result;
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getOrders(int neutral) {
+        ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (power(i, j) == neutral) {
+                    result.add(new Pair<>(i, j));
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }
