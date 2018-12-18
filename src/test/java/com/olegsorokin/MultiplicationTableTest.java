@@ -82,4 +82,8 @@ public class MultiplicationTableTest {
             }
         }
     }
+
+    // TODO: Add test for orders.
+
+    // TODO: Add test for equivalents.
 }

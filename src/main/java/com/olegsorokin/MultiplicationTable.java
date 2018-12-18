@@ -66,7 +66,6 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
         int[] row = IntStream.range(0, size).toArray();
         for (int i = 0; i < size; i++) {
             if (Arrays.equals(table[i], row)) {
-                System.out.println("True");
                 result.add(i);
             }
         }
@@ -85,14 +84,6 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
         return result;
     }
 
-    public ArrayList<Pair<Integer, Integer>> getEquivalents(int identity) {
-        ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            // TODO.
-        }
-        return result;
-    }
-
     public ArrayList<Pair<Integer, Integer>> getOrders(int neutral) {
         ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -101,6 +92,17 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
                     result.add(new Pair<>(i, j));
                     break;
                 }
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Integer> getEquivalents(int identity) {
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            Integer value = table[identity][i];
+            if (!result.contains(value)) {
+                result.add(i);
             }
         }
         return result;

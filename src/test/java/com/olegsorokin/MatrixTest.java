@@ -28,14 +28,15 @@ public class MatrixTest {
     public void Matrix_3x3_In_Power_0() {
         Matrix m = new Matrix(new float[] {1, 2, 3, 4, 5, 6, 7, 8, 9}, 3, 3);
         Matrix actual = m.power(0);
-        Assert.assertEquals(Matrix.identity(3), actual);
+        Matrix expected = Matrix.identity(3);
+        Assert.assertEquals(actual, expected);
     }
 
     @Test
     public void Matrix_3x3_In_Power_1() {
-        Matrix m = new Matrix(new float[] {1, 2, 3, 4, 5, 6, 7, 8, 9}, 3, 3);
-        Matrix actual = m.power(1);
-        Assert.assertEquals(m, actual);
+        Matrix expected = new Matrix(new float[] {1, 2, 3, 4, 5, 6, 7, 8, 9}, 3, 3);
+        Matrix actual = expected.power(1);
+        Assert.assertEquals(actual, expected);
     }
 
     @Test
@@ -50,27 +51,49 @@ public class MatrixTest {
     public void Non_Square_2x3_Matrix_In_Power_3() {
         Matrix m = new Matrix(new float[] {5, 6, 7, 1, 9, 3}, 2, 3);
         Matrix actual = m.power(3);
-        Assert.assertEquals(new Matrix(0, 0), actual);
+        Matrix expected = new Matrix(0, 0);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void Identity_1x1() {
-        Matrix m = Matrix.identity(1);
+        Matrix actual = Matrix.identity(1);
         Matrix expected = new Matrix(new float[] {1}, 1, 1);
-        Assert.assertEquals(m, expected);
+        Assert.assertEquals(actual, expected);
     }
 
     @Test
     public void Identity_2x2() {
-        Matrix m = Matrix.identity(2);
+        Matrix actual = Matrix.identity(2);
         Matrix expected = new Matrix(new float[] {1, 0, 0, 1}, 2, 2);
-        Assert.assertEquals(m, expected);
+        Assert.assertEquals(actual, expected);
     }
 
     @Test
     public void Identity_3x3() {
-        Matrix m = Matrix.identity(3);
+        Matrix actual = Matrix.identity(3);
         Matrix expected = new Matrix(new float[] {1, 0, 0, 0, 1, 0, 0, 0, 1}, 3, 3);
-        Assert.assertEquals(m, expected);
+        Assert.assertEquals(actual, expected);
     }
+
+    @Test
+    public void Map_Multiply_By_2_Function_Over_Matrix() {
+        Matrix m = new Matrix(new float[] {1, 2, 3, 4}, 2, 2);
+        Matrix actual = m.map(x -> x * 2);
+        Matrix expected = new Matrix(new float[] {2, 4, 6, 8}, 2, 2);
+        Assert.assertEquals(actual, expected);
+    }
+
+    @Test
+    public void Test_Matrix_Copy() {
+        Matrix expected = new Matrix(new float[] {5, 6, 7, 8, 9, 10, 11, 12, 13}, 3, 3);
+        Matrix actual = expected.copy();
+        Assert.assertEquals(actual, expected);
+    }
+
+    // TODO: Add tests for matrix comparing.
+
+    // TODO: Add tests for equals method.
+
+    // TODO: Add tests for hash method.
 }
