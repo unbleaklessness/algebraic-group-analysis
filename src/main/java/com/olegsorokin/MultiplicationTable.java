@@ -84,6 +84,11 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
         return result;
     }
 
+    /**
+     * Get orders of elements.
+     * @param neutral Index of the neutral element.
+     * @return Pairs where first value is an element and second value is it's order.
+     */
     public ArrayList<Pair<Integer, Integer>> getOrders(int neutral) {
         ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -97,6 +102,11 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
         return result;
     }
 
+    /**
+     * Get pairs of equivalent elements.
+     * @param identity Index of identity matrix. Equivalence will be calculated with respect to this matrix.
+     * @return Pair of equivalent elements.
+     */
     public ArrayList<Integer> getEquivalents(int identity) {
         ArrayList<Integer> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {

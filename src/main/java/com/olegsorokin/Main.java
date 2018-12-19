@@ -39,8 +39,8 @@ class Main {
 //            x.print();
 //        }
 
-        float iv = group.getModulus() - 1;
-        Integer identity2 = elements.indexOf(new Matrix(new float[] {iv, 0, 0, iv}, 2, 2));
+        float ax = group.getModulus() - 1;
+        Integer identity2 = elements.indexOf(new Matrix(new float[] {ax, 0, 0, ax}, 2, 2));
         ArrayList<Integer> equivalents = table.getEquivalents(identity2);
         for (final Integer x : equivalents) {
             System.out.println(x);

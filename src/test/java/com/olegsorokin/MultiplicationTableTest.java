@@ -6,6 +6,7 @@ import main.java.com.olegsorokin.interfaces.IGroup;
 import main.java.com.olegsorokin.interfaces.IMultiplicator;
 import main.java.com.olegsorokin.utils.Pair;
 import main.java.com.olegsorokin.utils.Random;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,28 +33,27 @@ public class MultiplicationTableTest {
 
     @Test
     public void Table_Power_VS_Matrix_Power() {
-        int i1 = Random.randomInt(elements.size() - 1);
-        int i2 = table.power(i1, 4);
-        Matrix m1 =  elements.get(i1);
-        Matrix m1p2 = multiplicator.multiply(m1, m1);
-        Matrix m1p3 = multiplicator.multiply(m1p2, m1);
-        Matrix m1p4 = multiplicator.multiply(m1p3, m1);
-        Matrix m2 = elements.get(i2);
-        Assert.assertEquals(m1p4, m2);
+        for (int i = 0; i < elements.size(); i++) {
+            int power = Random.randomInt(3, 7);
+            Matrix actual = elements.get(table.power(i, power));
+            Matrix original = elements.get(i);
+            Matrix expected = original;
+            for (int j = 1; j < power; j++) {
+                expected = multiplicator.multiply(expected, original);
+            }
+            Assert.assertEquals(actual, expected);
+        }
     }
 
     @Test
     public void Commutative_Test() {
         ArrayList<Pair<Integer, Integer>> commutative = table.getCommutative();
-
         for (final Pair<Integer, Integer> i : commutative) {
-            int i1 = table.multiply(i.getFirst(), i.getSecond());
-            int i2 = table.multiply(i.getSecond(), i.getFirst());
-            Assert.assertEquals(i1, i2);
-
-            Matrix m1 = multiplicator.multiply(elements.get(i.getFirst()), elements.get(i.getSecond()));
-            Matrix m2 = multiplicator.multiply(elements.get(i.getSecond()), elements.get(i.getFirst()));
-            Assert.assertEquals(m1, m2);
+            Matrix m1 = elements.get(i.getFirst());
+            Matrix m2 = elements.get(i.getSecond());
+            Matrix first = multiplicator.multiply(m1, m2);
+            Matrix second = multiplicator.multiply(m2, m1);
+            Assert.assertEquals(first, second);
         }
     }
 
@@ -61,13 +61,10 @@ public class MultiplicationTableTest {
     public void Neutrals_Test() {
         ArrayList<Integer> neutrals = table.getNeutrals();
         for (final Integer i : neutrals) {
-            for (Integer j = 0; j < elements.size(); j++) {
-                Assert.assertEquals(j, table.multiply(i, j));
-
-                Matrix m1 = elements.get(j);
-                Matrix m2 = elements.get(i);
-                Matrix m3 = multiplicator.multiply(m1, m2);
-                Assert.assertEquals(m3, m1);
+            for (final Matrix expected : elements) {
+                Matrix neutral = elements.get(i);
+                Matrix actual = multiplicator.multiply(expected, neutral);
+                Assert.assertEquals(actual, expected);
             }
         }
     }
@@ -78,12 +75,31 @@ public class MultiplicationTableTest {
         for (final Integer i : neutrals) {
             ArrayList<Pair<Integer, Integer>> inverses = table.getInverses(i);
             for (final Pair<Integer, Integer> j : inverses) {
-                Assert.assertEquals(table.multiply(j.getFirst(), j.getSecond()), i);
+                Matrix m1 = elements.get(j.getFirst());
+                Matrix m2 = elements.get(j.getSecond());
+                Matrix actual = multiplicator.multiply(m1, m2);
+                Matrix expected = elements.get(i);
+                Assert.assertEquals(actual, expected);
             }
         }
     }
 
-    // TODO: Add test for orders.
+    @Test
+    public void Orders_Test() {
+        ArrayList<Integer> neutrals = table.getNeutrals();
+        for (final Integer i : neutrals) {
+            ArrayList<Pair<Integer, Integer>> orders = table.getOrders(i);
+            for (final Pair<Integer, Integer> j : orders) {
+                Matrix m = elements.get(j.getFirst());
+                Matrix actual = m;
+                for (int k = 1; k < j.getSecond(); k++) {
+                    actual = multiplicator.multiply(actual, m);
+                }
+                Matrix expected = elements.get(i);
+                Assert.assertEquals(actual, expected);
+            }
+        }
+    }
 
     // TODO: Add test for equivalents.
 }
