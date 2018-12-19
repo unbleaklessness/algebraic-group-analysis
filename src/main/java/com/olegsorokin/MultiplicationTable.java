@@ -1,7 +1,10 @@
 package main.java.com.olegsorokin;
 
 import main.java.com.olegsorokin.interfaces.IMultiplicator;
+<<<<<<< Updated upstream
 import main.java.com.olegsorokin.utils.Pair;
+=======
+>>>>>>> Stashed changes
 
 import java.util.ArrayList;
 import java.util.Arrays;

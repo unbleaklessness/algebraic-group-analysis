@@ -1,3 +1,4 @@
 .idea/
 algebraic-groups-analysis.iml
 out/
+.attach_pid*

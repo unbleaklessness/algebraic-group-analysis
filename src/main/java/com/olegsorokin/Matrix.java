@@ -90,7 +90,7 @@ public class Matrix implements Comparator<Matrix>, Comparable<Matrix>, IMultipli
         }
     }
 
-    public Matrix map(Function<Float, Float> function) {
+    public Matrix map(final Function<Float, Float> function) {
         Matrix result = new Matrix(rows, columns);
         for (int i = 0; i < rows * columns; i++) {
             result.data[i] = function.apply(data[i]);

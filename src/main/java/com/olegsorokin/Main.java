@@ -11,6 +11,7 @@ class Main {
         IGroup group = new Group168();
 
         MatrixModulusMultiplicator multiplicator = new MatrixModulusMultiplicator(group.getModulus());
+
         GroupGenerator<Matrix> generator = new GroupGenerator<>();
 
         ArrayList<Matrix> elements = generator.generate(group.getInitials(), multiplicator);
