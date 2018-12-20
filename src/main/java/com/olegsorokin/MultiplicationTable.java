@@ -2,18 +2,17 @@ package main.java.com.olegsorokin;
 
 import main.java.com.olegsorokin.interfaces.IMultiplicator;
 import main.java.com.olegsorokin.utils.Pair;
+import main.java.com.olegsorokin.utils.Pairs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.IntStream;
+import java.util.HashSet;
+import java.util.List;
 
 public class MultiplicationTable {
     private int[][] table;
     private int size;
 
-    private MultiplicationTable() {}
-
-    public <T> MultiplicationTable(final ArrayList<T> elements, final IMultiplicator<T> multiplicator) {
+    public <T> MultiplicationTable(final List<T> elements, final IMultiplicator<T> multiplicator) {
         size = elements.size();
         table = new int[size][size];
 
@@ -139,11 +138,63 @@ public class MultiplicationTable {
                     flag = false;
                 }
             }
-            if (flag == true) {
+            if (flag) {
                 result.add(i);
             }
             flag = true;
         }
         return result;
+    }
+
+    public ArrayList<Integer> conjugate(Integer element, final List<Pair<Integer, Integer>> inverses) {
+        if (element > size || element < 0) {
+            return new ArrayList<>();
+        }
+        HashSet<Integer> result = new HashSet<>();
+        for (int i = 0; i < size; i++) {
+            ArrayList<Integer> iInverses = Pairs.getSecondForFirst(i, inverses);
+            if (iInverses.size() != 0) {
+                Integer inverse = iInverses.get(0);
+                Integer value = table[table[inverse][element]][i];
+                result.add(value);
+            }
+        }
+        return new ArrayList<>(result);
+    }
+
+    private ArrayList<Integer> getSequence() {
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            result.add(i);
+        }
+        return result;
+    }
+
+    public ArrayList<ArrayList<Integer>> getConjugacyClasses(final List<Pair<Integer, Integer>> inverses) {
+        if (inverses.size() == 0) {
+            return new ArrayList<>();
+        }
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        ArrayList<Integer> original = getSequence();
+        while (true) {
+            if (original.size() == 0) {
+                return result;
+            }
+            ArrayList<ArrayList<Integer>> conjugationVariants = new ArrayList<>();
+            for (int i : original) {
+                ArrayList<Integer> conjugations = conjugate(i, inverses);
+                conjugationVariants.add(conjugations);
+            }
+            int max = -1;
+            int index = -1;
+            for (int i = 0; i < conjugationVariants.size(); i++) {
+                if (conjugationVariants.get(i).size() > max) {
+                    max = conjugationVariants.get(i).size();
+                    index = i;
+                }
+            }
+            original.removeAll(conjugationVariants.get(index));
+            result.add(conjugationVariants.get(index));
+        }
     }
 }

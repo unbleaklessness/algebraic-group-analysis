@@ -1,7 +1,5 @@
 package main.java.com.olegsorokin;
 
-import main.java.com.olegsorokin.interfaces.IMultiplicable;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Function;

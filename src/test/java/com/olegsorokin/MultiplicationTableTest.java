@@ -2,6 +2,7 @@ package test.java.com.olegsorokin;
 
 import main.java.com.olegsorokin.*;
 import main.java.com.olegsorokin.groups.Group1092;
+import main.java.com.olegsorokin.groups.Group168;
 import main.java.com.olegsorokin.interfaces.IGroup;
 import main.java.com.olegsorokin.interfaces.IMultiplicator;
 import main.java.com.olegsorokin.utils.Pair;
@@ -13,7 +14,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class MultiplicationTableTest {
-    private static IGroup group = new Group1092();
+    private static IGroup group = new Group168();
     private static GroupGenerator<Matrix> generator = new GroupGenerator<>();
     private static IMultiplicator<Matrix> multiplicator = new MatrixModulusMultiplicator(group.getModulus());
     private static ArrayList<Matrix> elements = generator.generate(group.getInitials(), multiplicator);
@@ -97,6 +98,19 @@ public class MultiplicationTableTest {
                 }
                 Matrix expected = elements.get(i);
                 Assert.assertEquals(actual, expected);
+            }
+        }
+    }
+
+    @Test
+    public void Center_Test() {
+        ArrayList<Integer> center = table.getCenter();
+        for (final Integer i : center) {
+            Matrix m1 = elements.get(i);
+            for (final Matrix m2 : elements) {
+                Matrix m3 = multiplicator.multiply(m1, m2);
+                Matrix m4 = multiplicator.multiply(m2, m1);
+                Assert.assertEquals(m3, m4);
             }
         }
     }

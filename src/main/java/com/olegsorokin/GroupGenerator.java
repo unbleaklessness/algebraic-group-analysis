@@ -1,13 +1,13 @@
 package main.java.com.olegsorokin;
 
-import main.java.com.olegsorokin.interfaces.IMultiplicable;
 import main.java.com.olegsorokin.interfaces.IMultiplicator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class GroupGenerator<T> {
-    public ArrayList<T> generate(final ArrayList<T> initials, final IMultiplicator<T> multiplicator) {
+    public ArrayList<T> generate(final List<T> initials, final IMultiplicator<T> multiplicator) {
         HashSet<T> current = new HashSet<>(initials);
 
         while (true) {
