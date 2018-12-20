@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Function;
 
-public class Matrix implements Comparator<Matrix>, Comparable<Matrix>, IMultiplicable<Matrix> {
+public class Matrix implements Comparator<Matrix>, Comparable<Matrix> {
     private int rows;
     private int columns;
     private float[] data;
@@ -57,8 +57,6 @@ public class Matrix implements Comparator<Matrix>, Comparable<Matrix>, IMultipli
             return new Matrix(0, 0);
         }
         if (n < 0) {
-            // TODO: Add support for negative powers.
-            System.out.println("Raising a matrix in a negative power is not yet supported!");
             return new Matrix(0, 0);
         } else if (n == 0) {
             return identity(rows);

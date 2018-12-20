@@ -1,6 +1,5 @@
 package main.java.com.olegsorokin;
 
-import main.java.com.olegsorokin.interfaces.IContainer;
 import main.java.com.olegsorokin.interfaces.IMultiplicator;
 import main.java.com.olegsorokin.utils.Pair;
 
@@ -8,13 +7,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-public class MultiplicationTable<T> implements IMultiplicator<Integer> {
+public class MultiplicationTable {
     private int[][] table;
     private int size;
 
     private MultiplicationTable() {}
 
-    public MultiplicationTable(final IContainer<T> elements, final IMultiplicator<T> multiplicator) {
+    public <T> MultiplicationTable(final ArrayList<T> elements, final IMultiplicator<T> multiplicator) {
         size = elements.size();
         table = new int[size][size];
 
@@ -25,24 +24,17 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
         }
     }
 
-    public MultiplicationTable<T> copy() {
-        MultiplicationTable<T> result = new MultiplicationTable<>();
-        result.size = size;
-        result.table = new int[size][size];
-        for (int i = 0; i < table.length; i++) {
-            for (int j = 0; j < table[i].length; j++) {
-                result.table[i][j] = table[i][j];
-            }
+    public Integer multiply(Integer index1, Integer index2) {
+        if (index1 > size || index1 < 0 || index2 > size || index2 < 0) {
+            return -1;
         }
-        return result;
-    }
-
-    @Override
-    public Integer multiply(Integer row, Integer column) {
-        return table[row][column];
+        return table[index1][index2];
     }
 
     public Integer power(Integer element, Integer n) {
+        if (element > size || element < 0 || n <= 0) {
+            return -1;
+        }
         Integer result = element;
         for (int i = 1; i < n; i++) {
             result = table[result][element];
@@ -55,9 +47,9 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
     }
 
     public void print() {
-        for (int i = 0; i < table.length; i++) {
-            for (int j = 0; j < table[i].length; j++) {
-                System.out.print(table[i][j]);
+        for (final int[] row : table) {
+            for (final int element : row) {
+                System.out.print(element);
                 System.out.print(" ");
             }
             System.out.println();
@@ -78,16 +70,25 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
 
     public ArrayList<Integer> getNeutrals() {
         ArrayList<Integer> result = new ArrayList<>();
-        int[] row = IntStream.range(0, size).toArray();
+        boolean flag = true;
         for (int i = 0; i < size; i++) {
-            if (Arrays.equals(table[i], row)) {
+            for (int j = 0; j < size; j++) {
+                if (!(table[i][j] == j)) {
+                    flag = false;
+                }
+            }
+            if (flag) {
                 result.add(i);
             }
+            flag = true;
         }
         return result;
     }
 
     public ArrayList<Pair<Integer, Integer>> getInverses(int neutral) {
+        if (neutral > size || neutral < 0) {
+            return new ArrayList<>();
+        }
         ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -99,12 +100,10 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
         return result;
     }
 
-    /**
-     * Get orders of elements.
-     * @param neutral Index of the neutral element.
-     * @return Pairs where first value is an element and second value is it's order.
-     */
     public ArrayList<Pair<Integer, Integer>> getOrders(int neutral) {
+        if (neutral > size || neutral < 0) {
+            return new ArrayList<>();
+        }
         ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -117,18 +116,33 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
         return result;
     }
 
-    /**
-     * Get pairs of equivalent elements.
-     * @param identity Index of identity matrix. Equivalence will be calculated with respect to this matrix.
-     * @return Pair of equivalent elements.
-     */
     public ArrayList<Integer> getEquivalents(int identity) {
+        if (identity > size || identity < 0) {
+            return new ArrayList<>();
+        }
         ArrayList<Integer> result = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             Integer value = table[identity][i];
             if (!result.contains(value)) {
                 result.add(i);
             }
+        }
+        return result;
+    }
+
+    public ArrayList<Integer> getCenter() {
+        ArrayList<Integer> result = new ArrayList<>();
+        boolean flag = true;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (!(table[i][j] == table[j][i])) {
+                    flag = false;
+                }
+            }
+            if (flag == true) {
+                result.add(i);
+            }
+            flag = true;
         }
         return result;
     }

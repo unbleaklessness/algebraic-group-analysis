@@ -5,7 +5,7 @@ import main.java.com.olegsorokin.interfaces.IGroup;
 
 import java.util.ArrayList;
 
-public class Group1024 implements IGroup {
+public class Group1092 implements IGroup {
     @Override
     public float getModulus() {
         return 13;
