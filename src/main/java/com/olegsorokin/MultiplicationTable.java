@@ -1,5 +1,6 @@
 package main.java.com.olegsorokin;
 
+import main.java.com.olegsorokin.interfaces.IContainer;
 import main.java.com.olegsorokin.interfaces.IMultiplicator;
 import main.java.com.olegsorokin.utils.Pair;
 
@@ -11,7 +12,9 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
     private int[][] table;
     private int size;
 
-    public MultiplicationTable(final ArrayList<T> elements, final IMultiplicator<T> multiplicator) {
+    private MultiplicationTable() {}
+
+    public MultiplicationTable(final IContainer<T> elements, final IMultiplicator<T> multiplicator) {
         size = elements.size();
         table = new int[size][size];
 
@@ -20,6 +23,18 @@ public class MultiplicationTable<T> implements IMultiplicator<Integer> {
                 table[i][j] = elements.indexOf(multiplicator.multiply(elements.get(i), elements.get(j)));
             }
         }
+    }
+
+    public MultiplicationTable<T> copy() {
+        MultiplicationTable<T> result = new MultiplicationTable<>();
+        result.size = size;
+        result.table = new int[size][size];
+        for (int i = 0; i < table.length; i++) {
+            for (int j = 0; j < table[i].length; j++) {
+                result.table[i][j] = table[i][j];
+            }
+        }
+        return result;
     }
 
     @Override

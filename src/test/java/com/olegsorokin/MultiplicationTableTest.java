@@ -1,6 +1,7 @@
 package test.java.com.olegsorokin;
 
 import main.java.com.olegsorokin.*;
+import main.java.com.olegsorokin.groups.Group1024;
 import main.java.com.olegsorokin.groups.Group168;
 import main.java.com.olegsorokin.interfaces.IGroup;
 import main.java.com.olegsorokin.interfaces.IMultiplicator;
@@ -13,11 +14,11 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class MultiplicationTableTest {
-    private static IGroup group = new Group168();
+    private static IGroup group = new Group1024();
     private static GroupGenerator<Matrix> generator = new GroupGenerator<>();
     private static IMultiplicator<Matrix> multiplicator = new MatrixModulusMultiplicator(group.getModulus());
     private static ArrayList<Matrix> elements = generator.generate(group.getInitials(), multiplicator);
-    private static MultiplicationTable<Matrix> table = new MultiplicationTable<>(elements, multiplicator);
+    private static MultiplicationTable<Matrix> table = new MultiplicationTable<>(new CommonContainer(elements), multiplicator);
 
     @Test
     public void Table_Multiplication_VS_Matrix_Multiplication() {

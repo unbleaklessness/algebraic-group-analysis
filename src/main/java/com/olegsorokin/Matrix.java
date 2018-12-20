@@ -29,6 +29,14 @@ public class Matrix implements Comparator<Matrix>, Comparable<Matrix>, IMultipli
         }
     }
 
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
     public Matrix multiply(final Matrix other) {
         if (rows != other.columns) {
             return new Matrix(0, 0);
