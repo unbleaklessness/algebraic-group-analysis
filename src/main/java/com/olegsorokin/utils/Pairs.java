@@ -23,4 +23,13 @@ public class Pairs {
         }
         return result;
     }
+    
+    public static <A> Integer indexOfInBoth(A element, List<Pair<A, A>> pairs) {
+    	for (int i = 0; i < pairs.size(); i++) {
+    		if (pairs.get(i).getFirst().equals(element) || pairs.get(i).getSecond().equals(element)) {
+    			return i;
+    		}
+    	}
+    	return -1;
+    }
 }

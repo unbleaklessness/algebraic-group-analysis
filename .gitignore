@@ -2,3 +2,7 @@
 algebraic-groups-analysis.iml
 out/
 .attach_pid*
+/bin/
+.settings/
+.classpath
+.project

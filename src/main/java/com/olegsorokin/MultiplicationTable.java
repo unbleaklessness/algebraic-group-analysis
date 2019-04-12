@@ -3,6 +3,7 @@ package main.java.com.olegsorokin;
 import main.java.com.olegsorokin.interfaces.IMultiplicator;
 import main.java.com.olegsorokin.utils.Pair;
 import main.java.com.olegsorokin.utils.Pairs;
+import main.java.com.olegsorokin.utils.Random;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,16 +12,62 @@ import java.util.List;
 public class MultiplicationTable {
     private int[][] table;
     private int size;
+    public Integer identity2Index;
 
-    public <T> MultiplicationTable(final List<T> elements, final IMultiplicator<T> multiplicator) {
-        size = elements.size();
+//    public <T> MultiplicationTable(final List<T> elements, final IMultiplicator<T> multiplicator) {
+//        size = elements.size();
+//        table = new int[size][size];
+//
+//        for (int i = 0; i < size; i++) {
+//            for (int j = 0; j < size; j++) {
+//                table[i][j] = elements.indexOf(multiplicator.multiply(elements.get(i), elements.get(j)));
+//            }
+//        }
+//    }
+    
+    private <T> MultiplicationTable(Integer tableSize) {
+        size = tableSize;
         table = new int[size][size];
+    }
+    
+    public static <T> MultiplicationTable createTable(final List<T> elements, final IMultiplicator<T> multiplicator) {
+    	MultiplicationTable result = new MultiplicationTable(elements.size());
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                table[i][j] = elements.indexOf(multiplicator.multiply(elements.get(i), elements.get(j)));
+        for (int i = 0; i < result.size; i++) {
+            for (int j = 0; j < result.size; j++) {
+            	result.table[i][j] = elements.indexOf(multiplicator.multiply(elements.get(i), elements.get(j)));
             }
         }
+        
+        return result;
+    }
+    
+    public static <T> MultiplicationTable createUniqueTable(final List<T> elements, final IMultiplicator<T> multiplicator, final T identity2) {
+    	ArrayList<Pair<T, T>> equivalentMatrices = new ArrayList<>();
+        
+        ArrayList<T> banned = new ArrayList<>();
+        for (T element : elements) {
+        	T equivalent = multiplicator.multiply(element, identity2);
+            
+            if (banned.contains(element) || banned.contains(equivalent)) {
+            	continue;
+            }
+            banned.add(element);
+            banned.add(equivalent);
+            
+            equivalentMatrices.add(new Pair<>(element, equivalent));
+        }
+        
+        MultiplicationTable result = new MultiplicationTable(equivalentMatrices.size());
+        
+	    for (int i = 0; i < equivalentMatrices.size(); i++) {
+		    for (int j = 0; j < equivalentMatrices.size(); j++) {
+		    	T multiplication = multiplicator.multiply(equivalentMatrices.get(i).getFirst(), equivalentMatrices.get(j).getFirst());
+		    	result.table[i][j] = Pairs.indexOfInBoth(multiplication, equivalentMatrices);
+		    }
+		}
+        
+        return result;
     }
 
     public Integer multiply(Integer index1, Integer index2) {
@@ -115,19 +162,19 @@ public class MultiplicationTable {
         return result;
     }
 
-    public ArrayList<Integer> getEquivalents(int identity) {
-        if (identity > size || identity < 0) {
-            return new ArrayList<>();
-        }
-        ArrayList<Integer> result = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            Integer value = table[identity][i];
-            if (!result.contains(value)) {
-                result.add(i);
-            }
-        }
-        return result;
-    }
+//    public ArrayList<Integer> getEquivalents(int identity) {
+//        if (identity > size || identity < 0) {
+//            return new ArrayList<>();
+//        }
+//        ArrayList<Integer> result = new ArrayList<>();
+//        for (int i = 0; i < size; i++) {
+//            Integer value = table[identity][i];
+//            if (!result.contains(value)) {
+//                result.add(i);
+//            }
+//        }
+//        return result;
+//    }
 
     public ArrayList<Integer> getCenter() {
         ArrayList<Integer> result = new ArrayList<>();
@@ -176,25 +223,49 @@ public class MultiplicationTable {
         }
         ArrayList<ArrayList<Integer>> result = new ArrayList<>();
         ArrayList<Integer> original = getSequence();
+       
+        
+        int counter = 0;
         while (true) {
             if (original.size() == 0) {
                 return result;
             }
-            ArrayList<ArrayList<Integer>> conjugationVariants = new ArrayList<>();
-            for (int i : original) {
-                ArrayList<Integer> conjugations = conjugate(i, inverses);
-                conjugationVariants.add(conjugations);
-            }
-            int max = -1;
-            int index = -1;
-            for (int i = 0; i < conjugationVariants.size(); i++) {
-                if (conjugationVariants.get(i).size() > max) {
-                    max = conjugationVariants.get(i).size();
-                    index = i;
-                }
-            }
-            original.removeAll(conjugationVariants.get(index));
-            result.add(conjugationVariants.get(index));
+            
+//            ArrayList<ArrayList<Integer>> conjugationVariants = new ArrayList<>();
+//            for (int i : original) {
+//                ArrayList<Integer> conjugations = conjugate(i, inverses);
+//                conjugationVariants.add(conjugations);
+//            }
+//            
+////            System.out.print("#");
+////            System.out.print(counter);
+////            System.out.print(" (length: ");
+////            System.out.print(conjugationVariants.size());
+////            System.out.println(") ");
+////            counter++;
+//            
+//            System.out.format("Length: %d \n", original.size());
+//            
+//            int min = 100000;
+//            int index = -1;
+//            for (int i = 0; i < conjugationVariants.size(); i++) {
+//                if (conjugationVariants.get(i).size() < min) {
+//                    min = conjugationVariants.get(i).size();
+//                    index = i;
+//                }
+//            }
+//            original.removeAll(conjugationVariants.get(index));
+//            result.add(conjugationVariants.get(index));
+            
+            Integer rnd = Random.randomInt(original.size() - 1);
+            ArrayList<Integer> conjugations = conjugate(original.get(rnd), inverses);
+            
+            System.out.format("N: %d \n", counter);
+            System.out.format("rnd: %d \n", rnd);
+            System.out.format("Length: %d \n", original.size());
+            
+            original.removeAll(conjugations);
+            result.add(conjugations);
         }
     }
 }

@@ -24,4 +24,15 @@ public class Pair<A, B> {
         System.out.print(second);
         System.out.print(")");
     }
+    
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) return true;
+
+        if (!(other instanceof Pair<?, ?>)) return false;
+
+        Pair<?, ?> pair = (Pair<?, ?>) other;
+        
+        return first == pair.first && second == pair.second;
+    }
 }
