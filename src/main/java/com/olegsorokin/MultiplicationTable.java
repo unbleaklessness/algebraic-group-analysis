@@ -221,51 +221,37 @@ public class MultiplicationTable {
         if (inverses.size() == 0) {
             return new ArrayList<>();
         }
-        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
-        ArrayList<Integer> original = getSequence();
-       
         
-        int counter = 0;
         while (true) {
-            if (original.size() == 0) {
-                return result;
+        	ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+            ArrayList<Integer> original = getSequence();
+           
+            int last_size = -1;
+            
+            while (true) {
+                if (original.size() == 0) {
+                	int end_size = 0;
+                	for (ArrayList<Integer> c : result) {
+                		end_size += c.size();
+                	}
+                	if (end_size != size) {
+                		break;
+                	}
+                    return result;
+                }
+                
+                Integer rnd = Random.randomInt(original.size() - 1);
+                ArrayList<Integer> conjugations = conjugate(original.get(rnd), inverses);
+                
+                original.removeAll(conjugations);
+                
+                if (original.size() == last_size) {
+                	break;
+                } else {
+                	result.add(conjugations);
+                }
+                last_size = original.size();
             }
-            
-//            ArrayList<ArrayList<Integer>> conjugationVariants = new ArrayList<>();
-//            for (int i : original) {
-//                ArrayList<Integer> conjugations = conjugate(i, inverses);
-//                conjugationVariants.add(conjugations);
-//            }
-//            
-////            System.out.print("#");
-////            System.out.print(counter);
-////            System.out.print(" (length: ");
-////            System.out.print(conjugationVariants.size());
-////            System.out.println(") ");
-////            counter++;
-//            
-//            System.out.format("Length: %d \n", original.size());
-//            
-//            int min = 100000;
-//            int index = -1;
-//            for (int i = 0; i < conjugationVariants.size(); i++) {
-//                if (conjugationVariants.get(i).size() < min) {
-//                    min = conjugationVariants.get(i).size();
-//                    index = i;
-//                }
-//            }
-//            original.removeAll(conjugationVariants.get(index));
-//            result.add(conjugationVariants.get(index));
-            
-            Integer rnd = Random.randomInt(original.size() - 1);
-            ArrayList<Integer> conjugations = conjugate(original.get(rnd), inverses);
-            
-            System.out.format("N: %d \n", counter);
-            System.out.format("rnd: %d \n", rnd);
-            System.out.format("Length: %d \n", original.size());
-            
-            original.removeAll(conjugations);
-            result.add(conjugations);
         }
     }
 }
